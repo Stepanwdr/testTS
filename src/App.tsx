@@ -1,26 +1,45 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import React ,{ FC, useState } from "react";
+import styled from "styled-components";
+import ToDoForm from "./components/ToDoForm";
+import Navbar from "./components/Navbar";
+import ToDoList from "./ToDolist";
+import { Itodo } from "./interfaces";
+const App:FC=()=>{
+    const [todos,setToDos]=useState<Itodo[]>([])
+    const handleAdd=(title:string)=>{
+    const newTodo:Itodo={
+        title:title,
+        id:Date.now(),
+        completed:false
+    }
+    setToDos((prev)=>([...prev,newTodo]))
+    }
+    const handleToggle=(id:number)=>{
+          setToDos(prev=>prev.map((todo)=>{
+          if(todo.id===id){
+            todo.completed=true
+            }
+   return todo
+}
+    ))
+    }
+    const hadleDelete=(id:number)=>{
+        console.log(id)
+     setToDos(prev=>prev.filter((todo)=>todo.id !== id))
+    }
+    return (
+<>
+<Navbar/>
+<Container>
+<ToDoForm onAdd={handleAdd}/>
+<ToDoList todos={todos} onToggle={handleToggle} onDelete={hadleDelete}/>
+</Container>
+</>
+)
 }
 
+const Container=styled.div`
+width:80%;
+margin: 0 auto;
+`
 export default App;
